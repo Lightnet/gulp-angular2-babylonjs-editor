@@ -1,4 +1,4 @@
-# gulp-angular2-babylonjs
+# gulp-angular2-babylonjs-editor
 
 Information: To run gulp auto script builds for development testing to run web page with Babel ES6, Angular2 and Babylon.js javascript.
 
