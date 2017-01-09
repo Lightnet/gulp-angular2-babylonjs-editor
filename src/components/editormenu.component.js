@@ -35,6 +35,7 @@ import '../babylon.min.js';
       <a href="#" (click)="addmaterial();">Material</a>
     </div>
     </li>
+    <!--
     <li class="dropdown"><a href="#" class="dropbtn">Packages</a>
     <div class="dropdown-content" style="z-index:5">
       <a href="#">Scripts</a>
@@ -51,6 +52,7 @@ import '../babylon.min.js';
     <li><a href="#" class="dropbtn" (click)="scriptdebug();">Debug</a></li>
     <li><a href="#" class="dropbtn" (click)="scriptplay();">Play</a></li>
     <li><a href="#" class="dropbtn" (click)="scriptstop();">Stop</a></li>
+    -->
     </ul>
     `
 })
@@ -80,15 +82,18 @@ export class EditorMenu {
         console.log("scriptclearscene");
         if(this.gameservice.scene !=null){
             var objscene = this.gameservice.scene;
-            while (objscene.children.length)
-            {
-                objscene.remove(objscene.children[0]);
+            for(var i = objscene.meshes.length; i > 0 ;i--){
+                objscene.meshes[0].dispose();
             }
         }
     }
 
     scriptdeleteobject(){
-        console.log('scriptdeleteobject');
+        //console.log('scriptdeleteobject');
+        if(this.gameservice.selectobject !=null){
+            this.gameservice.selectobject.dispose();
+            this.gameservice.selectobject = null;
+        }
     }
 
     scriptbuild(){
@@ -110,37 +115,21 @@ export class EditorMenu {
     addcube(){
         console.log("addcube");
         if(this.gameservice.scene !=null){
-            console.log("cube");
-            var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    		var material = new THREE.MeshBasicMaterial( { color: 0x00ffff } );
-    		var cube = new THREE.Mesh( geometry, material );
-            cube.name = "cube";
-    		this.gameservice.scene.add( cube );
+            BABYLON.MeshBuilder.CreateBox('box1', {height:1,width:1,depth:1}, this.gameservice.scene);
         }
     }
 
     addspshere(){
         console.log("addspshere");
-        console.log("addcube");
         if(this.gameservice.scene !=null){
-            console.log("cube");
-            var geometry = new THREE.SphereGeometry( 1, 32, 32 );
-    		var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-    		var sphere  = new THREE.Mesh( geometry, material );
-            sphere.name = "sphere";
-    		this.gameservice.scene.add( sphere  );
+            BABYLON.MeshBuilder.CreateSphere('sphere1', {diameter:1}, this.gameservice.scene);
         }
     }
 
     addsplane(){
         console.log("addsplane");
         if(this.gameservice.scene !=null){
-            console.log("cube");
-            var geometry = new THREE.PlaneBufferGeometry( 5, 5, 32 );
-    		var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-    		var plane = new THREE.Mesh( geometry, material );
-            plane.name = "plane";
-    		this.gameservice.scene.add( plane   );
+            var ground = BABYLON.Mesh.CreateGround('ground1', 6, 6, 2, this.gameservice.scene);
         }
     }
 
@@ -149,6 +138,6 @@ export class EditorMenu {
     }
 
     addmaterial(){
-        console.log("addmaterial");
+        console.log("addmaterial > ?");
     }
 }

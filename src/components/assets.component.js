@@ -6,7 +6,7 @@ import {GameService} from '../services/game.service';
     selector: 'assets-list',
     template: `
         Assets
-        <button (click)="refresh()">Refresh</button>
+        <!--<button (click)="refresh()">Refresh</button>-->
         <!--
         <div *ngIf="gameservice.scene">
             <a *ngFor="let obj of gameservice.scene.children">

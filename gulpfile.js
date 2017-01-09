@@ -22,8 +22,8 @@ const vendors = [
     '@angular/core',
     '@angular/common',
     '@angular/platform-browser',
-    '@angular/router',
-    '@angular/http',
+    //'@angular/router',
+    //'@angular/http',
     '@angular/forms',
     'ng2-ace-editor'
 ];
@@ -67,7 +67,8 @@ gulp.task('html:copy', () => {
 
 gulp.task('css:copy', () => {
   return gulp.src(['src/*.css','src/**/*.css'])
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('public'))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('copy',['html:copy','css:copy']);
@@ -90,9 +91,12 @@ gulp.task('watch:index.js', () => {
     .external(vendors) // Specify all vendors as external source
     .transform(babelify);
   const w = watchify(b)
-    .on('update', () => bundle(w))
-    .on('log', gutil.log)
-    .on("update", reload);
+    .on('update', () => {
+        bundle(w);
+        //reload();
+    })
+    .on('log', gutil.log);
+    //.on("update", reload);
   return bundle(w)
 });
 
@@ -123,7 +127,7 @@ gulp.task('browser-sync', function() {
             baseDir: "public"
         }
     });
-    gulp.watch(['src/*.css','src/**/*.css']).on("change", reload);
+    gulp.watch(['src/*.css','src/**/*.css'],['css:copy']);
 });
 
 // build order

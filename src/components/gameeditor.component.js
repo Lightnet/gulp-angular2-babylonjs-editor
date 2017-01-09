@@ -23,7 +23,7 @@ import '../jquery.layout.min.js';
 
         </div>
         <div class="ui-layout-south" style="margin: 0;padding : 0;">
-            <scripteditorlayout></scripteditorlayout>
+            <editorpanel></editorpanel>
         </div>
         <div class="ui-layout-east">
             <scene-list></scene-list>
@@ -65,7 +65,7 @@ export class GameEditor implements OnInit{
             }
         });
         var layout = $('#container').layout();
-        layout.sizePane("south", 200);
+        layout.sizePane("south", 250);
         layout.toggle("north");
     }
 

@@ -1,6 +1,6 @@
 //setup component main page html
 
-import { NgModule, Component, Input, Attribute } from '@angular/core';
+import { Component } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import {GameService} from './services/game.service';
