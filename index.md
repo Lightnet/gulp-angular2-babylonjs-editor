@@ -4,7 +4,7 @@
 
 ##3D Webgl:
 
- * [Angular 2 Babylonjs editor Prototype](https://lightnet.github.io/angular2-babylonjs-editor/public/)
+ * [Angular 2 Babylonjs Editor Prototype](https://lightnet.github.io/gulp-angular2-babylonjs-editor/public/)
  
 ### Authors and Contributors:
 
