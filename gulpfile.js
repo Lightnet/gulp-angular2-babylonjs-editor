@@ -10,21 +10,26 @@ const babelify = require('babelify');
 const del = require('del');
 const gls = require('gulp-live-server');
 const gutil  = require('gulp-util');
+const browserSync = require('browser-sync').create();
+const reload      = browserSync.reload;
 
 //angular 2 with babel
 const vendors = [
     'babel-polyfill',
     'zone.js/dist/zone',
+    'rxjs/add/operator/map',
     '@angular/platform-browser-dynamic',
     '@angular/core',
     '@angular/common',
     '@angular/platform-browser',
     '@angular/router',
-    'rxjs/add/operator/map'
+    '@angular/http',
+    '@angular/forms',
+    'ng2-ace-editor'
 ];
 
 //Add vender.js support files from angular, rxjs, babel-polyfill, zone
-gulp.task('build:vendor', () => {
+gulp.task('build:vendor.js', () => {
   const b = browserify({
     debug: true
   });
@@ -45,12 +50,6 @@ gulp.task('build:vendor', () => {
   return b;
 });
 
-gulp.task('css:copy', () => {
-  return gulp.src(['src/layout-default-latest.css',
-    ])
-    .pipe(gulp.dest('public'));
-});
-
 gulp.task('js:copy', () => {
   return gulp.src(['src/babylon.min.js',
     './src/jquery.min.js',
@@ -62,14 +61,19 @@ gulp.task('js:copy', () => {
 
 //development index.html
 gulp.task('html:copy', () => {
-  return gulp.src(['src/index.html'])
+  return gulp.src(['src/*.html','src/**/*.html'])
     .pipe(gulp.dest('public'));
 });
 
-gulp.task('copy',['html:copy','js:copy','css:copy']);
+gulp.task('css:copy', () => {
+  return gulp.src(['src/*.css','src/**/*.css'])
+    .pipe(gulp.dest('public'));
+});
+
+gulp.task('copy',['html:copy','css:copy']);
 
 //build single file
-gulp.task('build', () => {
+gulp.task('build:app.js', () => {
   const b = browserify('src/index.js', { debug: true })
     .ignore(['./src/babylon.min.js','./src/jquery.js','./src/jquery-ui.min.js','./src/jquery.layout.min.js'])
     .external(vendors) // Specify all vendors as external source
@@ -87,12 +91,13 @@ gulp.task('watch:index.js', () => {
     .transform(babelify);
   const w = watchify(b)
     .on('update', () => bundle(w))
-    .on('log', gutil.log);
+    .on('log', gutil.log)
+    .on("update", reload);
   return bundle(w)
 });
 
 gulp.task('watch:file', () =>{
-    gulp.watch(['src/index.html'],['html:copy']);
+    gulp.watch(['src/index.html'],['html:copy']).on("change", reload);
 });
 
 gulp.task('watch', ['watch:index.js','watch:file']);
@@ -111,6 +116,16 @@ gulp.task('serve', ()=> {
   return;
 });
 
+// Static server
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        server: {
+            baseDir: "public"
+        }
+    });
+    gulp.watch(['src/*.css','src/**/*.css']).on("change", reload);
+});
+
 // build order
 // clean = delete pulbic folder for clean up
 // copy = html, js
@@ -118,8 +133,13 @@ gulp.task('serve', ()=> {
 // build = app javascript
 // watch = watch files changes
 // serve =setup server url http://127.0.0.1:80
+//gulp.task('dev', ['clean','copy','build:vendor','build','watch','serve']);
 
-gulp.task('dev', ['clean','copy','build:vendor','build','watch','serve']);
+gulp.task('devfull', ['clean','copy','js:copy','build:vendor.js','build:app.js','watch','browser-sync']);
+
+gulp.task('dev', ['copy','build:app.js','watch','browser-sync']);
+
+
 // default development build
 gulp.task('default', ['dev']);
 
