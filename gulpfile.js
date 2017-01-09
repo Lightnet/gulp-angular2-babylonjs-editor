@@ -51,11 +51,10 @@ gulp.task('build:vendor.js', () => {
 });
 
 gulp.task('js:copy', () => {
-  return gulp.src(['src/babylon.min.js',
-    './src/jquery.min.js',
-    './src/jquery-ui.min.js',
-    './src/jquery.layout.min.js'
-    ])
+  return gulp.src([ 'src/babylon.min.js',
+                    './src/jquery.min.js',
+                    './src/jquery-ui.min.js',
+                    './src/jquery.layout.min.js'])
     .pipe(gulp.dest('public'));
 });
 
@@ -76,7 +75,10 @@ gulp.task('copy',['html:copy','css:copy']);
 //build single file
 gulp.task('build:app.js', () => {
   const b = browserify('src/index.js', { debug: true })
-    .ignore(['./src/babylon.min.js','./src/jquery.js','./src/jquery-ui.min.js','./src/jquery.layout.min.js'])
+    .ignore('./src/babylon.min.js')
+    .ignore('./src/jquery.min.js')
+    .ignore('./src/jquery-ui.min.js')
+    .ignore('./src/jquery.layout.min.js')
     .external(vendors) // Specify all vendors as external source
     .transform(babelify);
   return bundle(b);
