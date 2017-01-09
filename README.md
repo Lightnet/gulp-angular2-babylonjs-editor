@@ -2,6 +2,8 @@
 
 Information: To run gulp auto script builds for development testing to run web page with Babel ES6, Angular2 and Babylon.js javascript.
 
+[Angular 2 Babylonjs Editor Prototype](https://lightnet.github.io/gulp-angular2-babylonjs-editor/public/)
+
 Programs:
  * Atom.io (optional)
   * bottom-dock
